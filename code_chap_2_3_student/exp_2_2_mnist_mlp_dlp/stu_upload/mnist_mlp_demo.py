@@ -30,7 +30,8 @@ class MNIST_MLP(object):
             self.input_quant_params.append(pycnml.QuantParam(int(input_params[i]), float(input_params[i+1])))
         for i in range(0, len(filter_params), 2):
             self.filter_quant_params.append(pycnml.QuantParam(int(filter_params[i]), float(filter_params[i+1])))
-
+        print(len(self.input_quant_params))
+        print(len(input_params))
         # TODO：使用 pycnml 建立三层神经网络结构
         self.net.setInputShape(batch_size, input_size, 1, 1)
         # fc1
@@ -39,7 +40,8 @@ class MNIST_MLP(object):
         self.net.createMlpLayer('fc2', hidden2, self.input_quant_params[1])
         self.net.createReLuLayer('relu2')
         self.net.createMlpLayer('fc3', out_classes, self.input_quant_params[2])
-        self.net.createSoftmaxLayer('softmax', 1)
+        self.net.createReLuLayer('relu3')
+	self.net.createSoftmaxLayer('softmax', 1)
     
     def load_mnist(self, file_dir, is_images = 'True'):
         # Read binary data
@@ -64,8 +66,8 @@ class MNIST_MLP(object):
     
     def load_data(self, data_path, label_path):
         print('Loading MNIST data from files...')
-        test_images = self.load_mnist(os.path.join(MNIST_DIR, TEST_DATA), True)
-        test_labels = self.load_mnist(os.path.join(MNIST_DIR, TEST_LABEL), False)
+        test_images = self.load_mnist(data_path, True)
+        test_labels = self.load_mnist(label_path, False)
         self.test_data = np.append(test_images, test_labels, axis=1)
 
     def load_model(self, param_dir):  # 加载参数
