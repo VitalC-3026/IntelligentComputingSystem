@@ -52,7 +52,7 @@ class VGG19(object):
         self.layers['pool3'] = MaxPoolingLayer(2, 2)
 
         self.layers['conv4_1'] = ConvolutionalLayer(3, 256, 512, 1, 1)
-        self.layers['relu4_1'] = ReLULayer
+        self.layers['relu4_1'] = ReLULayer()
         self.layers['conv4_2'] = ConvolutionalLayer(3, 512, 512, 1, 1)
         self.layers['relu4_2'] = ReLULayer()
         self.layers['conv4_3'] = ConvolutionalLayer(3, 512, 512, 1, 1)

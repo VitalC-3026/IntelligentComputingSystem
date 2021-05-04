@@ -41,82 +41,82 @@ class VGG19(object):
         # relu1_2
         self.net.createReLuLayer('relu1_2')
         # pool1
-        _______________________
+        self.net.createPoolingLayer('pool1', 2, 2)
         # conv2_1
-        _______________________
+        self.net.createConvLayer('conv2_1', 128, 3, 1, 1, 1, self.input_quant_params[2])
         # relu2_1
-        _______________________
+        self.net.createReLuLayer('relu2_1')
         # conv2_2
-        _______________________
+        self.net.createConvLayer('conv2_2', 128, 3, 1, 1, 1, self.input_quant_params[3])
         # relu2_2
-        _______________________
+        self.net.createReLuLayer('relu2_2')
         # pool2
-        _______________________
+        self.net.createPoolingLayer('pool2', 2, 2)
         # conv3_1
-        _______________________
+        self.net.createConvLayer('conv3_1', 256, 3, 1, 1, 1, self.input_quant_params[4])
         # relu3_1
-        _______________________
+        self.net.createReLuLayer('relu3_1')
         # conv3_2
-        _______________________
+        self.net.createConvLayer('conv3_2', 256, 3, 1, 1, 1, self.input_quant_params[5])
         # relu3_2
-        _______________________
+        self.net.createReLuLayer('relu3_2')
         # conv3_3
-        _______________________
+        self.net.createConvLayer('conv3_3', 256, 3, 1, 1, 1, self.input_quant_params[6])
         # relu3_3
-        _______________________
+        self.net.createReLuLayer('relu3_3')
         # conv3_4
-        _______________________
+        self.net.createConvLayer('conv3_4', 256, 3, 1, 1, 1, self.input_quant_params[7])
         # relu3_4
-        _______________________
+        self.net.createReLuLayer('relu3_4')
         # pool3
-        _______________________
+        self.net.createPoolingLayer('pool3', 2, 2)
         # conv4_1
-        _______________________
+        self.net.createConvLayer('conv4_1', 512, 3, 1, 1, 1, self.input_quant_params[8])
         # relu4_1
-        _______________________
+        self.net.createReLuLayer('relu4_1')
         # conv4_2
-        _______________________
+        self.net.createConvLayer('conv4_2', 512, 3, 1, 1, 1, self.input_quant_params[9])
         # relu4_2
-        _______________________
+        self.net.createReLuLayer('relu4_2')
         # conv4_3
-        _______________________
+        self.net.createConvLayer('conv4_3', 512, 3, 1, 1, 1, self.input_quant_params[10])
         # relu4_3
-        _______________________
+        self.net.createReLuLayer('relu4_3')
         # conv4_4
-        _______________________
+        self.net.createConvLayer('conv4_4', 512, 3, 1, 1, 1, self.input_quant_params[11])
         # relu4_4
-        _______________________
+        self.net.createReLuLayer('relu4_4')
         # pool4
-        _______________________
+        self.net.createPoolingLayer('pool4', 2, 2)
         # conv5_1
-        _______________________
+        self.net.createConvLayer('conv5_1', 512, 3, 1, 1, 1, self.input_quant_params[12])
         # relu5_1
-        _______________________
+        self.net.createReLuLayer('relu5_1')
         # conv5_2
-        _______________________
+        self.net.createConvLayer('conv5_2', 512, 3, 1, 1, 1, self.input_quant_params[13])
         # relu5_2
-        _______________________
+        self.net.createReLuLayer('relu5_2')
         # conv5_3
-        _______________________
+        self.net.createConvLayer('conv5_3', 512, 3, 1, 1, 1, self.input_quant_params[14])
         # relu5_3
-        _______________________
+        self.net.createReLuLayer('relu5_3')
         # conv5_4
-        _______________________
+        self.net.createConvLayer('conv5_4', 512, 3, 1, 1, 1, self.input_quant_params[15])
         # relu5_4
-        _______________________
+        self.net.createReLuLayer('relu5_4')
         # pool5
-        _______________________
+        self.net.createPoolingLayer('pool5', 2, 2)
         
         # flatten
         self.net.createFlattenLayer('flatten', [1, 512 * 7 * 7, 1, 1])
         # fc6
-        _______________________
+        self.net.createMlpLayer('fc6', 4096, self.input_quant_params[16])
         # relu6
-        _______________________
+        self.net.createReLuLayer('relu6')
         # fc7
-        _______________________
+        self.net.createMlpLayer('fc7', 4096, self.input_quant_params[17])
         # relu7
-        _______________________
+        self.net.createReLuLayer('relu7')
         # fc8
         self.net.createMlpLayer('fc8', 1000, self.input_quant_params[18])
         # softmax
