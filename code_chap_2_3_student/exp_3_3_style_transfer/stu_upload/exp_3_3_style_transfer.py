@@ -26,17 +26,47 @@ class VGG19(object):
         print('Building vgg-19 model...')
 
         self.layers = {}
-        self.layers['conv1_1'] = ConvolutionalLayer(3, 3, 64, 1, 1)
+        self.layers['conv1_1'] = ConvolutionalLayer(3, 3, 64, 1, 1, type=1)
         self.layers['relu1_1'] = ReLULayer()
-        self.layers['conv1_2'] = ConvolutionalLayer(3, 64, 64, 1, 1)
+        self.layers['conv1_2'] = ConvolutionalLayer(3, 64, 64, 1, 1, type=1)
         self.layers['relu1_2'] = ReLULayer()
-        self.layers['pool1'] = MaxPoolingLayer(2, 2)
+        self.layers['pool1'] = MaxPoolingLayer(2, 2, type=1)
 
-        _______________________
+        self.layers['conv2_1'] = ConvolutionalLayer(3, 64, 128, 1, 1, type=1)
+        self.layers['relu2_1'] = ReLULayer()
+        self.layers['conv2_2'] = ConvolutionalLayer(3, 128, 128, 1, 1, type=1)
+        self.layers['relu2_2'] = ReLULayer()
+        self.layers['pool2'] = MaxPoolingLayer(2, 2, type=1)
 
-        self.layers['conv5_4'] = ConvolutionalLayer(3, 512, 512, 1, 1)
+        self.layers['conv3_1'] = ConvolutionalLayer(3, 128, 256, 1, 1, type=1)
+        self.layers['relu3_1'] = ReLULayer()
+        self.layers['conv3_2'] = ConvolutionalLayer(3, 256, 256, 1, 1, type=1)
+        self.layers['relu3_2'] = ReLULayer()
+        self.layers['conv3_3'] = ConvolutionalLayer(3, 256, 256, 1, 1, type=1)
+        self.layers['relu3_3'] = ReLULayer()
+        self.layers['conv3_4'] = ConvolutionalLayer(3, 256, 256, 1, 1, type=1)
+        self.layers['relu3_4'] = ReLULayer()
+        self.layers['pool3'] = MaxPoolingLayer(2, 2, type=1)
+
+        self.layers['conv4_1'] = ConvolutionalLayer(3, 256, 512, 1, 1, type=1)
+        self.layers['relu4_1'] = ReLULayer()
+        self.layers['conv4_2'] = ConvolutionalLayer(3, 512, 512, 1, 1, type=1)
+        self.layers['relu4_2'] = ReLULayer()
+        self.layers['conv4_3'] = ConvolutionalLayer(3, 512, 512, 1, 1, type=1)
+        self.layers['relu4_3'] = ReLULayer()
+        self.layers['conv4_4'] = ConvolutionalLayer(3, 512, 512, 1, 1, type=1)
+        self.layers['relu4_4'] = ReLULayer()
+        self.layers['pool4'] = MaxPoolingLayer(2, 2, type=1)
+
+        self.layers['conv5_1'] = ConvolutionalLayer(3, 512, 512, 1, 1, type=1)
+        self.layers['relu5_1'] = ReLULayer()
+        self.layers['conv5_2'] = ConvolutionalLayer(3, 512, 512, 1, 1, type=1)
+        self.layers['relu5_2'] = ReLULayer()
+        self.layers['conv5_3'] = ConvolutionalLayer(3, 512, 512, 1, 1, type=1)
+        self.layers['relu5_3'] = ReLULayer()
+        self.layers['conv5_4'] = ConvolutionalLayer(3, 512, 512, 1, 1, type=1)
         self.layers['relu5_4'] = ReLULayer()
-        self.layers['pool5'] = MaxPoolingLayer(2, 2)
+        self.layers['pool5'] = MaxPoolingLayer(2, 2, type=1)
 
         self.update_layer_list = []
         for layer_name in self.layers.keys():
@@ -89,7 +119,7 @@ class VGG19(object):
         layer_forward = {}
         for idx in range(len(self.param_layer_name)):
             # TODO： 计算VGG19网络的前向传播
-            current = _______________________
+            current = self.layers[self.param_layer_name[idx]].forward(current)
             if self.param_layer_name[idx] in layer_list:
                 layer_forward[self.param_layer_name[idx]] = current
         #print('Forward time: %f' % (time.time()-start_time))
@@ -99,9 +129,8 @@ class VGG19(object):
         start_time = time.time()
         layer_idx = list.index(self.param_layer_name, layer_name)
         for idx in range(layer_idx, -1, -1):
-            # TODO： 计算VGG19网络的反向传播
-            dloss = _______________________
-
+            # TODO： 计算VGG19网络的反向传播， 从这个layer_name开始往前倒
+            dloss = self.layers[self.param_layer_name[idx]].backward(dloss)
         #print('Backward time: %f' % (time.time()-start_time))
         return dloss
 
@@ -126,7 +155,7 @@ class AdamOptimizer(object):
         mt_hat = self.mt / (1 - self.beta1 ** self.step)
         vt_hat = self.vt / (1 - self.beta2 ** self.step)
         # TODO： 利用梯度的一阶矩和二阶矩的无偏估计更新风格迁移图像
-        output = _______________________
+        output = input - self.lr * mt_hat / (np.sqrt(vt_hat) + self.eps)
         return output
 
 
@@ -155,6 +184,7 @@ if __name__ == '__main__':
     transfer_image = get_random_img(content_image, NOISE)
 
     for step in range(TRAIN_STEP):
+        print(CONTENT_LOSS_LAYERS + STYLE_LOSS_LAYERS)
         transfer_layers = vgg.forward(transfer_image, CONTENT_LOSS_LAYERS + STYLE_LOSS_LAYERS)
         content_loss = np.array([])
         style_loss = np.array([])
@@ -162,22 +192,22 @@ if __name__ == '__main__':
         style_diff = np.zeros(transfer_image.shape)
         for layer in CONTENT_LOSS_LAYERS:
             # TODO： 计算内容损失的前向传播
-            current_loss = _______________________
+            current_loss = content_loss_layer.forward(transfer_layers[layer], content_layers[layer])
             content_loss = np.append(content_loss, current_loss)
             # TODO： 计算内容损失的反向传播
             dloss = content_loss_layer.backward(transfer_layers[layer], content_layers[layer])
-            content_diff += _______________________
+            content_diff += vgg.backward(dloss, layer)
         for layer in STYLE_LOSS_LAYERS:
             # TODO： 计算风格损失的前向传播
-            current_loss = _______________________
+            current_loss = style_loss_layer.forward(transfer_layers[layer], style_layers[layer])
             style_loss = np.append(style_loss, current_loss)
             # TODO： 计算风格损失的反向传播
             dloss = style_loss_layer.backward(transfer_layers[layer], style_layers[layer])
-            style_diff += _______________________
+            style_diff += vgg.backward(dloss, layer)
         total_loss = ALPHA * np.mean(content_loss) + BETA * np.mean(style_loss)
         image_diff = ALPHA * content_diff / len(CONTENT_LOSS_LAYERS) + BETA * style_diff / len(STYLE_LOSS_LAYERS)
         # TODO： 利用Adam优化器对风格迁移图像进行更新
-        transfer_image = _______________________
+        transfer_image = adam_optimizer.update(transfer_image, image_diff)
         if step % 20 == 0:
             print('Step %d, loss = %f' % (step, total_loss), content_loss, style_loss)
             vgg.save_image(transfer_image, content_shape, '../output/output_' + str(step) + '.jpg')

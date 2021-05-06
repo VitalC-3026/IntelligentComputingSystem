@@ -107,11 +107,11 @@ class MNIST_MLP(object):
     def backward(self):  # 神经网络的反向传播
         # TODO：神经网络的反向传播
         dloss = self.softmax.backward()
-	dh3 = self.fc3.backward(dloss)
-	dh2 = self.relu2.backward(dh3)
-	dh2 = self.fc2.backward(dh2)
-	dh1 = self.relu1.backward(dh2)
-	dh1 = self.fc1.backward(dh1)
+        dh3 = self.fc3.backward(dloss)
+        dh2 = self.relu2.backward(dh3)
+        dh2 = self.fc2.backward(dh2)
+        dh1 = self.relu1.backward(dh2)
+        dh1 = self.fc1.backward(dh1)
     def update(self, lr):
         for layer in self.update_layer_list:
             layer.update_param(lr)
