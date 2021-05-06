@@ -41,7 +41,7 @@ class ConvolutionalLayer(object):
                     for idxw in range(width_out):
                         # TODO: 计算卷积层的前向传播，特征图与卷积核的内积再加偏置
                         # self.weight[:, :, :, idxc] => (3, 3, 3), self.weight[:, idxc] x
-                        self.output[idxn, idxc, idxh, idxw] = np.sum(self.weight[:, :, :, idxc] * self.input_pad[idxn, :, idxh: idxh + self.kernel_size, idxw: idxw + self.kernel_size]) + self.bias[idxc]
+                        self.output[idxn, idxc, idxh, idxw] = np.sum(self.weight[:, :, :, idxc] * self.input_pad[idxn, :, idxh*self.stride: idxh*self.stride+self.kernel_size, idxw*self.stride: idxw*self.stride+self.kernel_size]) + self.bias[idxc]
         return self.output
     def load_param(self, weight, bias):  # 参数加载
         assert self.weight.shape == weight.shape

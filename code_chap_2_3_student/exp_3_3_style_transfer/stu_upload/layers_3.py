@@ -40,7 +40,6 @@ class StyleLossLayer(object):
         return loss
     def backward(self, input_layer, style_layer):
         # TODO：这里是乘input还是乘style
-        input_layer_reshape = np.reshape(input_layer, [input_layer.shape[0], input_layer.shape[1], -1])
         bottom_diff = np.zeros([input_layer.shape[0], input_layer.shape[1], input_layer.shape[2]*input_layer.shape[3]])
         for idxn in range(input_layer.shape[0]):
             # TODO： 计算风格损失的反向传播
